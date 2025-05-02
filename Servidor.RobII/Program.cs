@@ -53,36 +53,19 @@ class Program
 
                 Console.WriteLine($"Novo remetente adicionado: {remetente.Nome} (ID: {remetente.Id})");
 
-                // Confirmação de inserção via JSON
-                string jsonConfirmacao = JsonSerializer.Serialize(remetente);
-                byte[] dadosConfirmacao = Encoding.UTF8.GetBytes(jsonConfirmacao);
-                stream.Write(dadosConfirmacao, 0, dadosConfirmacao.Length);
+                // Envia a lista completa de remetentes como JSON
+                string jsonLista = JsonSerializer.Serialize(listaDeRemetentes);
+                byte[] dadosLista = Encoding.UTF8.GetBytes(jsonLista);
 
-                // Envia lista com ID e Nome de todos os remetentes
-                foreach (var r in listaDeRemetentes)
+                if (stream.CanWrite)
                 {
-                    if (stream.CanWrite)
-                    {
-
-                        Console.WriteLine("Enviando JSON inicial...");
-
-
-
-                        byte[] bytesId = Encoding.UTF8.GetBytes(r.Id.ToString());
-                        byte[] bytesNome = Encoding.UTF8.GetBytes(r.Nome);
-
-                        byte[] tamanhoId = BitConverter.GetBytes(bytesId.Length);
-                        byte[] tamanhoNome = BitConverter.GetBytes(bytesNome.Length);
-                        Console.WriteLine("Enviando tamanho e conteúdo de ID...");
-                        Console.WriteLine("Enviando tamanho e conteúdo de Nome...");
-                        stream.Write(tamanhoId, 0, 4);
-                        stream.Write(bytesId, 0, bytesId.Length);
-
-                        stream.Write(tamanhoNome, 0, 4);
-                        stream.Write(bytesNome, 0, bytesNome.Length);
-
-                        Console.WriteLine($"Enviado: ID = {r.Id}, Nome = {r.Nome}");
-                    }
+                    stream.Write(dadosLista, 0, dadosLista.Length);
+                    Console.WriteLine("Lista de remetentes enviada ao cliente:");
+                    Console.WriteLine(jsonLista);
+                }
+                else
+                {
+                    Console.WriteLine("Erro: O fluxo não está disponível para escrita.");
                 }
             }
             else
@@ -90,6 +73,8 @@ class Program
                 Console.WriteLine("Erro ao desserializar o JSON.");
             }
 
+            // Fecha o fluxo e a conexão
+            stream.Close();
             cliente.Close();
         }
         catch (Exception ex)
