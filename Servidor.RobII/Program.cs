@@ -46,31 +46,36 @@ class Program
 
             Remetente remetente = JsonSerializer.Deserialize<Remetente>(jsonRecebido);
 
-            if (remetente != null)
+            /*//if (remetente != null)
+            //{
+            //    remetente.Id = listaDeRemetentes.Count; // usa índice da lista como ID
+            //    listaDeRemetentes.Add(remetente);
+
+            //    Console.WriteLine($"Novo remetente adicionado: {remetente.Nome} (ID: {remetente.Id})");
+
+            //    // Envia a lista completa de remetentes como JSON
+            //    string jsonLista = JsonSerializer.Serialize(listaDeRemetentes);
+            //    byte[] dadosLista = Encoding.UTF8.GetBytes(jsonLista);
+
+            //    if (stream.CanWrite)
+            //    {
+            //        stream.Write(dadosLista, 0, dadosLista.Length);
+            //        Console.WriteLine("Lista de remetentes enviada ao cliente:");
+            //        Console.WriteLine(jsonLista);
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Erro: O fluxo não está disponível para escrita.");
+            //    }
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Erro ao desserializar o JSON.");
+            /}*/
+
+            while (true) // Thread de Mensagens 
             {
-                remetente.Id = listaDeRemetentes.Count; // usa índice da lista como ID
-                listaDeRemetentes.Add(remetente);
 
-                Console.WriteLine($"Novo remetente adicionado: {remetente.Nome} (ID: {remetente.Id})");
-
-                // Envia a lista completa de remetentes como JSON
-                string jsonLista = JsonSerializer.Serialize(listaDeRemetentes);
-                byte[] dadosLista = Encoding.UTF8.GetBytes(jsonLista);
-
-                if (stream.CanWrite)
-                {
-                    stream.Write(dadosLista, 0, dadosLista.Length);
-                    Console.WriteLine("Lista de remetentes enviada ao cliente:");
-                    Console.WriteLine(jsonLista);
-                }
-                else
-                {
-                    Console.WriteLine("Erro: O fluxo não está disponível para escrita.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Erro ao desserializar o JSON.");
             }
 
             // Fecha o fluxo e a conexão
