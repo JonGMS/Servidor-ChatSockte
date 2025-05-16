@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Servidor.RobII
 =======
 # ChatSocket
